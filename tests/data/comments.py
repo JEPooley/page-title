@@ -51,7 +51,7 @@ def test_as_comment():
             FileTypes(".html"),
             "text",
             "<!-- text -->",
-            id="html"
+            id="html-from-ext"
         ),
     ]
     return arguments, params
