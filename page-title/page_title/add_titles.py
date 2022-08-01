@@ -17,7 +17,7 @@ def get_ext(filepath: str) -> str:
 def get_filepaths(root_dir: str,
                   include: list | None = None,
                   exclude: list | None = None
-                  ) -> list(tuple[TextIO, str]):
+                  ) -> list[tuple[TextIO, str]]:
     filepaths = glob.glob(root_dir, recursive=True)
 
     if include is not None:

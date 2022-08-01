@@ -1,8 +1,8 @@
-from enum import Enum, auto
+from enum import Enum
 
 
 class FileTypes(Enum):
-    python = auto()
-    js = auto()
-    css = auto()
-    html = auto()
+    python = ".py"
+    js = ".js"
+    css = ".css"
+    html = ".html"

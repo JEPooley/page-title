@@ -22,6 +22,36 @@ def test_as_comment():
             "text",
             "/* text */",
             id="css"
-        )
+        ),
+        param(
+            FileTypes.html,
+            "text",
+            "<!-- text -->",
+            id="html"
+        ),
+        param(
+            FileTypes(".py"),
+            "text",
+            "# text",
+            id="python-from-ext"
+        ),
+        param(
+            FileTypes(".js"),
+            "text",
+            "// text",
+            id="javascript-from-ext"
+        ),
+        param(
+            FileTypes(".css"),
+            "text",
+            "/* text */",
+            id="css-from-ext"
+        ),
+        param(
+            FileTypes(".html"),
+            "text",
+            "<!-- text -->",
+            id="html"
+        ),
     ]
     return arguments, params
