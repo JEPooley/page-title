@@ -1,16 +1,43 @@
 import glob
 import os
-from typing import TextIO
+import functools
+from typing import Callable, TextIO
 
 from page_title.comments import as_comment
 from page_title.file_types import FileTypes
 
 
+def fix_start(func) -> Callable:
+    @functools.wraps(func)
+    def wrapper(file, *args, **kwargs):
+        file.seek(0, 0)
+        result = func(file, *args, **kwargs)
+        print(result)
+        file.seek(0, 0)
+        return result
+    return wrapper
+
+
 def prepend_to_file(file: TextIO, text: str) -> None:
-    file.seek(0, 0)
+    data = read_file(file)
+    write_file(file, text + "\n" + data)
+
+
+@fix_start
+def write_file(file: TextIO, text: str) -> None:
+    file.write(text)
+
+
+@fix_start
+def read_file(file: TextIO) -> str:
     data = file.read()
-    file.seek(0, 0)
-    file.write(text + "\n" + data)
+    return data
+
+
+@fix_start
+def read_line(file: TextIO) -> str:
+    line = file.readline()
+    return line
 
 
 def get_ext(filepath: str) -> str:
