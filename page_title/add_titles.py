@@ -12,7 +12,6 @@ def fix_start(func) -> Callable:
     def wrapper(file, *args, **kwargs):
         file.seek(0, 0)
         result = func(file, *args, **kwargs)
-        print(result)
         file.seek(0, 0)
         return result
     return wrapper
@@ -21,6 +20,13 @@ def fix_start(func) -> Callable:
 def prepend_to_file(file: TextIO, text: str) -> None:
     data = read_file(file)
     write_file(file, text + "\n" + data)
+
+
+def set_first_line(file: TextIO, text: str) -> None:
+    first_line = read_line(file)
+    if first_line != text and first_line != text + "\n":
+        data = read_file(file)
+        write_file(file, text + "\n" + data)
 
 
 @fix_start
@@ -67,4 +73,4 @@ def add_titles(root_dir: str,
         ext = get_ext(filepath)
         title = as_comment(FileTypes(ext), filepath)
         with open(filepath, "w+") as file:
-            prepend_to_file(file, title)
+            set_first_line(file, title)
