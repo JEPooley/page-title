@@ -54,4 +54,4 @@ def test_add_titles():
     # Assert
     with open("tests/data/test_dir/test.py", "r") as pyfile:
         pytext = pyfile.read()
-    assert pytext == "# /tests/data/test_dir\nLorem Ipsum"
+    assert pytext == "# ./tests/data/test_dir/test.py\n# Lorem Ipsum\n"
