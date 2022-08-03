@@ -24,9 +24,11 @@ def prepend_to_file(file: TextIO, text: str) -> None:
 
 def set_first_line(file: TextIO, text: str) -> None:
     first_line = read_line(file)
+    print("First: ", first_line)
     if first_line != text and first_line != text + "\n":
         data = read_file(file)
-        write_file(file, text + "\n" + data)
+        print("DATA: ", data)
+        # write_file(file, text + "\n" + data)
 
 
 @fix_start
@@ -54,13 +56,13 @@ def get_filepaths(root_dir: str,
                   include: list | None = None,
                   exclude: list | None = None
                   ) -> list[tuple[TextIO, str]]:
-    filepaths = glob.glob(root_dir, recursive=True)
+    filepaths = glob.glob(os.path.join(root_dir, "**"), recursive=True)
 
     if include is not None:
-        filepaths = filepaths.filter(lambda path: path in include)
+        filepaths = filter(lambda path: path in include, filepaths)
 
     if exclude is not None:
-        filepaths = filepaths.filter(lambda path: path not in exclude)
+        filepaths = filter(lambda path: path not in exclude, filepaths)
 
     return [(path, get_ext(path)) for path in filepaths]
 
@@ -69,8 +71,9 @@ def add_titles(root_dir: str,
                include: list | None = None,
                exclude: list | None = None):
     filepaths = get_filepaths(root_dir, include, exclude)
-    for filepath in filepaths:
-        ext = get_ext(filepath)
-        title = as_comment(FileTypes(ext), filepath)
-        with open(filepath, "w+") as file:
-            set_first_line(file, title)
+    print("Filepaths: ", filepaths)
+    for filepath, ext in filepaths:
+        if ext in (".py", ".js", ".html", ".css"):
+            title = as_comment(FileTypes(ext), filepath)
+            with open(filepath, "w+") as file:
+                set_first_line(file, title)
