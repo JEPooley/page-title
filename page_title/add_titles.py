@@ -24,7 +24,6 @@ def prepend_to_file(file: TextIO, text: str) -> None:
 
 def set_first_line(file: TextIO, text: str) -> None:
     first_line = read_line(file)
-    print("First: ", first_line)
     if first_line != text and first_line != text + "\n":
         data = read_file(file)
         write_file(file, text + "\n" + data)
@@ -74,5 +73,4 @@ def add_titles(root_dir: str,
         if ext in (".py", ".js", ".html", ".css"):
             title = as_comment(FileTypes(ext), filepath)
             with open(filepath, "r+") as file:
-                print("File: ", filepath)
                 set_first_line(file, title)

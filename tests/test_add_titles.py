@@ -1,5 +1,6 @@
 import tempfile
 from page_title.add_titles import add_titles, prepend_to_file, set_first_line
+import os
 
 
 def test_prepend_to_file():
@@ -47,11 +48,37 @@ def test_set_first_line_with_duplicate():
         assert file_text == "Added Text\nLorem Ipsum"
 
 
-def test_add_titles():
-    # Act
-    add_titles("./tests/data/test_dir")
+def test_add_titles_py():
+    # Arrange
+    with tempfile.TemporaryDirectory() as dirpath:
+        path = os.path.join(dirpath, "test.py")
+        with open(path, "w+") as file:
+            file.write("Lorem Ipsum")
+            file.seek(0, 0)
+
+            # Act
+            add_titles(dirpath)
+
+            file.seek(0, 0)
+            text = file.read()
 
     # Assert
-    with open("tests/data/test_dir/test.py", "r") as pyfile:
-        pytext = pyfile.read()
-    assert pytext == "# ./tests/data/test_dir/test.py\n# Lorem Ipsum\n"
+    assert text == f"# {path}\nLorem Ipsum"
+
+
+def test_add_titles_js():
+    # Arrange
+    with tempfile.TemporaryDirectory() as dirpath:
+        path = os.path.join(dirpath, "test.js")
+        with open(path, "w+") as file:
+            file.write("Lorem Ipsum")
+            file.seek(0, 0)
+
+            # Act
+            add_titles(dirpath)
+
+            file.seek(0, 0)
+            text = file.read()
+
+    # Assert
+    assert text == f"// {path}\nLorem Ipsum"
