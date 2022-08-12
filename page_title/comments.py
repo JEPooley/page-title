@@ -3,11 +3,18 @@ from typing import Callable
 
 
 def as_comment(file_type: FileTypes, text: str) -> str:
+    """
+    Convert text to comment syntax for given file type
+    """
     converter = get_comment_converter(file_type)
     return converter(text)
 
 
 def get_comment_converter(file_type: FileTypes) -> Callable:
+    """
+    Get appropriate method for converting a text to a comment, depending on the
+    given file type
+    """
     if file_type == FileTypes.python:
         return as_python_comment
     elif file_type == FileTypes.js:
