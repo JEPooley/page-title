@@ -65,12 +65,30 @@ def get_filepaths(root_dir: str,
     return [(path, get_ext(path)) for path in filepaths]
 
 
+def strip_slashes(filepath: str) -> str:
+    if filepath[:2] == "./":
+        return filepath[2:]
+    elif filepath[0] == "/":
+        return filepath[1:]
+    return filepath
+
+
+def clean_filepath(filepath: str, filename_only: bool = False) -> str:
+    filepath = filepath.replace("\\", "/")
+    filepath = strip_slashes(filepath)
+    if filename_only:
+        _, filepath = os.path.split(filepath)
+    return filepath
+
+
 def add_titles(root_dir: str,
                include: list | None = None,
-               exclude: list | None = None):
+               exclude: list | None = None,
+               filename_only: bool = False):
     filepaths = get_filepaths(root_dir, include, exclude)
     for filepath, ext in filepaths:
         if ext in (".py", ".js", ".html", ".css"):
-            title = as_comment(FileTypes(ext), filepath)
+            title = clean_filepath(filepath, filename_only)
+            comment = as_comment(FileTypes(ext), title)
             with open(filepath, "r+") as file:
-                set_first_line(file, title)
+                set_first_line(file, comment)

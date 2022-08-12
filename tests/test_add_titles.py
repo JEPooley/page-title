@@ -1,6 +1,11 @@
-import tempfile
-from page_title.add_titles import add_titles, prepend_to_file, set_first_line
 import os
+import tempfile
+
+import pytest
+from page_title.add_titles import (add_titles, clean_filepath, prepend_to_file,
+                                   set_first_line)
+
+from tests.data import add_titles as data
 
 
 def test_prepend_to_file():
@@ -48,6 +53,15 @@ def test_set_first_line_with_duplicate():
         assert file_text == "Added Text\nLorem Ipsum"
 
 
+@pytest.mark.parametrize(*data.test_clean_filepath())
+def test_clean_filepath(filepath, filename_only, expected_output):
+    # Act
+    cleaned_filepath = clean_filepath(filepath, filename_only)
+
+    # Assert
+    assert cleaned_filepath == expected_output
+
+
 def test_add_titles_py():
     # Arrange
     with tempfile.TemporaryDirectory() as dirpath:
@@ -63,7 +77,7 @@ def test_add_titles_py():
             text = file.read()
 
     # Assert
-    assert text == f"# {path}\nLorem Ipsum"
+    assert text == f"# {path[1:]}\nLorem Ipsum"
 
 
 def test_add_titles_js():
@@ -81,4 +95,4 @@ def test_add_titles_js():
             text = file.read()
 
     # Assert
-    assert text == f"// {path}\nLorem Ipsum"
+    assert text == f"// {path[1:]}\nLorem Ipsum"
