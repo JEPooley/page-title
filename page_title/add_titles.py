@@ -121,7 +121,7 @@ def add_titles(root_dir: str,
     """
     filepaths = get_filepaths(root_dir, include, exclude)
     for filepath, ext in filepaths:
-        if ext in (".py", ".js", ".html", ".css"):
+        if ext in FileTypes.list_values():
             title = clean_filepath(filepath, filename_only)
             comment = as_comment(FileTypes(ext), title)
             with open(filepath, "r+") as file:

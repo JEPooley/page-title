@@ -1,4 +1,5 @@
 from enum import Enum
+from functools import cache
 
 
 class FileTypes(Enum):
@@ -6,3 +7,8 @@ class FileTypes(Enum):
     js = ".js"
     css = ".css"
     html = ".html"
+
+    @classmethod
+    @cache
+    def list_values(cls):
+        return list(map(lambda c: c.value, cls))
