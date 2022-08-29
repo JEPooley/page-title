@@ -66,3 +66,38 @@ def test_clean_filepath():
         ),
     ]
     return arguments, params
+
+
+def test_add_titles():
+    arguments = "extension, file_text, comment_prefix, comment_suffix"
+    params = [
+        param(
+            ".css",
+            "Lorem Ipsum",
+            "/* ",
+            " */",
+            id="css"
+        ),
+        param(
+            ".html",
+            "Lorem Ipsum",
+            "<!-- ",
+            " -->",
+            id="html"
+        ),
+        param(
+            ".py",
+            "Lorem Ipsum",
+            "# ",
+            "",
+            id="python"
+        ),
+        param(
+            ".js",
+            "Lorem Ipsum",
+            "// ",
+            "",
+            id="js"
+        )
+    ]
+    return arguments, params

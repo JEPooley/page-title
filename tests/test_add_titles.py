@@ -62,12 +62,13 @@ def test_clean_filepath(filepath, filename_only, expected_output):
     assert cleaned_filepath == expected_output
 
 
-def test_add_titles_py():
+@pytest.mark.parametrize(*data.test_add_titles())
+def test_add_titles(extension, file_text, comment_prefix, comment_suffix):
     # Arrange
     with tempfile.TemporaryDirectory() as dirpath:
-        path = os.path.join(dirpath, "test.py")
+        path = os.path.join(dirpath, "test" + extension)
         with open(path, "w+") as file:
-            file.write("Lorem Ipsum")
+            file.write(file_text)
             file.seek(0, 0)
 
             # Act
@@ -77,22 +78,25 @@ def test_add_titles_py():
             text = file.read()
 
     # Assert
-    assert text == f"# {path[1:]}\nLorem Ipsum"
+    assert text == f"{comment_prefix}{path[1:]}{comment_suffix}\n{file_text}"
 
 
-def test_add_titles_js():
+@pytest.mark.parametrize(*data.test_add_titles())
+def test_add_titles_filename_only(extension, file_text,
+                                  comment_prefix, comment_suffix):
     # Arrange
     with tempfile.TemporaryDirectory() as dirpath:
-        path = os.path.join(dirpath, "test.js")
+        filename = "test" + extension
+        path = os.path.join(dirpath, filename)
         with open(path, "w+") as file:
-            file.write("Lorem Ipsum")
+            file.write(file_text)
             file.seek(0, 0)
 
             # Act
-            add_titles(dirpath)
+            add_titles(dirpath, filename_only=True)
 
             file.seek(0, 0)
             text = file.read()
 
     # Assert
-    assert text == f"// {path[1:]}\nLorem Ipsum"
+    assert text == f"{comment_prefix}{filename}{comment_suffix}\n{file_text}"

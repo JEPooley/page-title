@@ -10,5 +10,5 @@ class FileTypes(Enum):
 
     @classmethod
     @cache
-    def list_values(cls):
+    def list_values(cls) -> list:
         return list(map(lambda c: c.value, cls))
